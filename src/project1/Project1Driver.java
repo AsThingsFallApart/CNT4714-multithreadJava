@@ -32,8 +32,8 @@ public class Project1Driver {
     Thread WT8 = new Thread(new WithdrawalAgent("WT8", account));
     Thread WT9 = new Thread(new WithdrawalAgent("WT9", account));
     
-    System.out.print("Deposit Agents\t\t   Withdrawal Agents   \t\t        Balance\n");
-    System.out.print("--------------\t\t   -----------------   \t\t------------------------\n\n");
+    System.out.print("Deposit Agents\t\t\t   Withdrawal Agents   \t\t        Balance\n");
+    System.out.print("--------------\t\t\t   -----------------   \t\t------------------------\n");
     
 
     // create ExecutorService to manage threads

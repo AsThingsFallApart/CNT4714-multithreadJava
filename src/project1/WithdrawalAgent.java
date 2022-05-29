@@ -32,13 +32,13 @@ public class WithdrawalAgent implements Runnable {
       // generate random numbers in the range 1-99 (inclusive)
       withdrawalAmount = random.nextInt(98) + 1;
       linkedAccount.withdrawalFunds(withdrawalAmount);
-      System.out.print("\t\t\tAgent " + name + " withdraws $" + linkedAccount.getBalance());
-      System.out.print("\t(-) Balance is $" + linkedAccount.getBalance() + "\n");
+      System.out.print("\t\t\t\tAgent " + name + " withdraws $" + withdrawalAmount);
+      System.out.print("\t\t(-) Balance is $" + linkedAccount.getBalance() + "\n");
 
 
       // handle thread sleeping */
-      // range: 1-3 (inclusive)
-      sleepDuration = random.nextInt(5000);
+      // range: 3-6 (inclusive)
+      sleepDuration = random.nextInt(4) + 3;
       try {
         Thread.sleep(sleepDuration);
       }

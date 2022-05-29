@@ -32,13 +32,13 @@ public class DepositAgent implements Runnable {
       // generate a random number in the range 1-500 (inclusive)
       depositAmount = random.nextInt(499) + 1;
       linkedAccount.depositFunds(depositAmount);
-      System.out.print("Agent " + name + " deposits $" + linkedAccount.getBalance());
-      System.out.print("\t\t\t\t\t(+) Balance is $" + linkedAccount.getBalance() + "\n");
+      System.out.print("Agent " + name + " deposits $" + depositAmount);
+      System.out.print("\t\t\t\t\t\t(+) Balance is $" + linkedAccount.getBalance() + "\n");
 
 
       // handle thread sleeping */
-      // range: 1-3 (inclusive)
-      sleepDuration = random.nextInt(5000);
+      // range: 3-6 (inclusive)
+      sleepDuration = random.nextInt(4) + 3;
       try {
         Thread.sleep(sleepDuration);
       }
