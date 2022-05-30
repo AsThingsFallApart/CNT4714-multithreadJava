@@ -31,14 +31,13 @@ public class DepositAgent implements Runnable {
       /* handle deposits */
       // generate a random number in the range 1-500 (inclusive)
       depositAmount = random.nextInt(499) + 1;
-      linkedAccount.depositFunds(depositAmount);
-      System.out.print("Agent " + name + " deposits $" + depositAmount);
-      System.out.print("\t\t\t\t\t\t(+) Balance is $" + linkedAccount.getBalance() + "\n");
+      linkedAccount.depositFunds(depositAmount, name);
 
-
-      // handle thread sleeping */
-      // range: 3-6 (inclusive)
-      sleepDuration = random.nextInt(4) + 3;
+      /* handle thread sleeping */
+      // range: 6-9 (inclusive)
+      // due to architecture of Spectrex360 host,
+      // depositor sleep duration is x3 withdrawal sleep duration
+      sleepDuration = random.nextInt(4) + 6;
       try {
         Thread.sleep(sleepDuration);
       }

@@ -37,7 +37,7 @@ public class Project1Driver {
     
 
     // create ExecutorService to manage threads
-    ExecutorService threadExecutor = Executors.newCachedThreadPool();
+    ExecutorService threadExecutor = Executors.newFixedThreadPool(15);
 
     // start threads
     threadExecutor.execute(DT0);
@@ -56,5 +56,7 @@ public class Project1Driver {
     threadExecutor.execute(WT7);
     threadExecutor.execute(WT8);
     threadExecutor.execute(WT9);
+
+    threadExecutor.shutdown();
   }
 }
