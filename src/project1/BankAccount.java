@@ -13,10 +13,20 @@
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class BankAccount {
   private int balance = 0;
 
+  /* create time objects to flag "threshold" deposits and withdrawals */
+  // use the 'now()' method for 'LocalDateTime' objects to get a timestamp
+  // now() will need to be invoked to make a timestamp everytime a threshold value is generated
+  LocalDateTime currentTime = LocalDateTime.now();
+  // the 'DateTimeFormatter' object takes in the 'LocalDateTime' object and formats it into a desired pattern
+  DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd/MM/uuuu kk:mm:ss");
+
+  /* create synchronization objects to coordinate threads via mutual exclusion */
   // lock to control mutually exclusive access to the buffer
   private Lock mutex = new ReentrantLock();
 
@@ -26,11 +36,29 @@ public class BankAccount {
   // constructor
   public BankAccount(){}
 
+  // TODO: flag any deposit greather than $350
+  // TODO: flag any withdrawal greater than $75
+  // TODO: write to file when a flagged deposit/withdrawal is identified
+  // TODO: 
+  /* expectedFlagOutputDeposit:
+---			"* * * Flagged Transaction - Depositor Agent [threadName] Made A Deposit in Excess of $350.00 USD - See Flagged Transaction Log."
+--		expectedFlagOutputWithdrawal:
+---			"* * * Flagged Transaction - Withdrawal Agent [threadName] Made A Withdrawal in Excess of $75.00 USD - See Flagged Transaction Log."
+*/
+
+
   // mutator: subtract from balance
   public void withdrawalFunds(int amountToWithdrawal, String agentName) {
 
     // lock out any other threads from accessing the bank account object
     mutex.lock();
+
+    if(amountToWithdrawal > 75) {
+      currentTime = LocalDateTime.now();
+      System.out.print("\n* * * Flagged Transaction - Withdrawal Agent " + agentName + " Made A Withdrawal in Excess of $75.00 USD - See Flagged Transaction Log.\n");
+
+      // TODO: handle writing output to a file called 'transactions.txt'
+    }
 
     if(amountToWithdrawal > balance) {
       System.out.print("\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal);
