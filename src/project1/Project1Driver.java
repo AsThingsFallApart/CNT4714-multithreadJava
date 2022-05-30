@@ -4,14 +4,29 @@
    Due Date: June 5, 2022
 */
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Project1Driver {
 
   public static void main(String[] args) {
+    // instantiate a file to be used for threshold deposits/withdrawals
+    File outputFile = new File("transactions.txt");
+
+    // wipe the file clean each time the project is executed
+    outputFile.delete();
+
+    try {
+      outputFile.createNewFile();
+    }
+    catch(IOException exception) {
+      exception.printStackTrace();
+    }
+    
     // instantiate a bank account object to be shared amongst threads
-    BankAccount account = new BankAccount();
+    BankAccount account = new BankAccount(outputFile);
 
     // create FIVE deposit agent threads
     Thread DT0 = new Thread(new DepositAgent("DT0", account));

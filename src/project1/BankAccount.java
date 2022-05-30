@@ -10,14 +10,23 @@
 // objects in java are "pass by reference" so, even though a "bank account" is simply one integer,
 // all the threads will point to the same place in memory if passed an object
 
+/* synchronization */
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+/* file I/O */
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+/* timestamp generation */
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class BankAccount {
   private int balance = 0;
+  private File outputFile = new File("");
 
   /* create time objects to flag "threshold" deposits and withdrawals */
   // use the 'now()' method for 'LocalDateTime' objects to get a timestamp
@@ -34,18 +43,9 @@ public class BankAccount {
   private Condition sufficientBalance = mutex.newCondition();
 
   // constructor
-  public BankAccount(){}
-
-  // TODO: flag any deposit greather than $350
-  // TODO: flag any withdrawal greater than $75
-  // TODO: write to file when a flagged deposit/withdrawal is identified
-  // TODO: 
-  /* expectedFlagOutputDeposit:
----			"* * * Flagged Transaction - Depositor Agent [threadName] Made A Deposit in Excess of $350.00 USD - See Flagged Transaction Log."
---		expectedFlagOutputWithdrawal:
----			"* * * Flagged Transaction - Withdrawal Agent [threadName] Made A Withdrawal in Excess of $75.00 USD - See Flagged Transaction Log."
-*/
-
+  public BankAccount(File oFile) {
+    outputFile = oFile;
+  }
 
   // mutator: subtract from balance
   public void withdrawalFunds(int amountToWithdrawal, String agentName) {
@@ -61,9 +61,18 @@ public class BankAccount {
 
       if(amountToWithdrawal > 75) {
         currentTime = LocalDateTime.now();
-        System.out.print("\n* * * Flagged Transaction - Withdrawal Agent " + agentName + " Made A Withdrawal in Excess of $75.00 USD - See Flagged Transaction Log.\n\n");
+        System.out.print("\n* * * Flagged Transaction - Withdrawal Agent " + agentName + " Made A Withdrawal In Excess Of $75.00 USD - See Flagged Transaction Log.\n\n");
   
-        // TODO: handle writing output to a file called 'transactions.txt'
+        // instantiate a file writer and print threshold record to file
+        try {
+          FileWriter outputFileWriter = new FileWriter(outputFile, true);
+          outputFileWriter.write("\t\tWithdrawal Agent " + agentName + " issued withdrawal of $" + amountToWithdrawal + " at: " + timeFormatter.format(currentTime) + " EDT\n");
+          outputFileWriter.close();
+        }
+        catch(IOException e) {
+          e.printStackTrace();
+        }
+
       }
     }
     else {
@@ -79,7 +88,7 @@ public class BankAccount {
         exception.printStackTrace();
       }
     }
-    
+
     // unlock the lock, allowing other threads to access bank account object
     mutex.unlock();
   }
@@ -94,6 +103,21 @@ public class BankAccount {
 
     System.out.print("Agent " + agentName + " deposits $" + amountToDeposit);
     System.out.print("\t\t\t\t\t\t(+) Balance is $" + balance + "\n");
+
+    if(amountToDeposit > 350) {
+      System.out.print("\n* * * Flagged Transaction - Depositor Agent " + agentName + " Made A Deposit In Excess Of $350.00 USD - See Flagged Transaction Log.\n\n");
+
+      // instantiate a file writer and print threshold record to file
+      try {
+        FileWriter outputFileWriter = new FileWriter(outputFile, true);
+        outputFileWriter.write("Depositor Agent " + agentName + " issued withdrawal of $" + amountToDeposit + " at: " + timeFormatter.format(currentTime) + " EDT\n");
+        outputFileWriter.close();
+      }
+      catch(IOException e) {
+        e.printStackTrace();
+      }
+      
+    }
 
     // signal to all withdrawal agents that they can try to withdrawal again
     sufficientBalance.signalAll();
