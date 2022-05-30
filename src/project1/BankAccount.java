@@ -53,32 +53,33 @@ public class BankAccount {
     // lock out any other threads from accessing the bank account object
     mutex.lock();
 
-    if(amountToWithdrawal > 75) {
-      currentTime = LocalDateTime.now();
-      System.out.print("\n* * * Flagged Transaction - Withdrawal Agent " + agentName + " Made A Withdrawal in Excess of $75.00 USD - See Flagged Transaction Log.\n");
+    if(amountToWithdrawal <= balance) {
+      balance -= amountToWithdrawal;
+  
+      System.out.print("\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal);
+      System.out.print("\t\t(-) Balance is $" + balance + "\n");
 
-      // TODO: handle writing output to a file called 'transactions.txt'
+      if(amountToWithdrawal > 75) {
+        currentTime = LocalDateTime.now();
+        System.out.print("\n* * * Flagged Transaction - Withdrawal Agent " + agentName + " Made A Withdrawal in Excess of $75.00 USD - See Flagged Transaction Log.\n\n");
+  
+        // TODO: handle writing output to a file called 'transactions.txt'
+      }
     }
-
-    if(amountToWithdrawal > balance) {
+    else {
       System.out.print("\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal);
       System.out.print("\t\t(******) WITHDRAWAL BLOCKED - INSUFFICIENT FUNDS!!!\n");
+  
       try {
-        // wait for balance to change, hopefully being a sufficient level to withdrawal from
-        // without incurring a negative balance
+        // wait for balance to change, hopefully to a sufficient level 
+        // to withdrawal from without incurring a negative balance
         sufficientBalance.await();
       }
       catch(InterruptedException exception){
         exception.printStackTrace();
       }
     }
-    else {
-      balance -= amountToWithdrawal;
-
-      System.out.print("\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal);
-      System.out.print("\t\t(-) Balance is $" + balance + "\n");
-    }
-
+    
     // unlock the lock, allowing other threads to access bank account object
     mutex.unlock();
   }

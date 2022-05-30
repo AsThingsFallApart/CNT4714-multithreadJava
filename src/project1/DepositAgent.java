@@ -34,7 +34,7 @@ public class DepositAgent implements Runnable {
       linkedAccount.depositFunds(depositAmount, name);
 
       /* handle thread sleeping */
-      // range: 6-9 (inclusive)
+      // range: 6-9 (inclusive) milliseconds
       // due to architecture of Spectrex360 host,
       // depositor sleep duration is x3 withdrawal sleep duration
       sleepDuration = random.nextInt(4) + 6;

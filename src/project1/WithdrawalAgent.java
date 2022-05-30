@@ -34,7 +34,7 @@ public class WithdrawalAgent implements Runnable {
       linkedAccount.withdrawalFunds(withdrawalAmount, name);
 
       // handle thread sleeping */
-      // range: 0-3 (inclusive)
+      // range: 0-3 (inclusive) milliseconds
       sleepDuration = random.nextInt(4);
       try {
         Thread.sleep(sleepDuration);
