@@ -4,7 +4,7 @@
    Due Date: June 5, 2022
 */
 
-/* timeTakenToCompleteProject: 20 hours over 3 days (8 + 8 + 4) */
+/* timeTakenToCompleteProject: 25 hours over 4 days (8 + 8 + 4 + 5) */
 
 import java.io.File;
 import java.io.FileWriter;
@@ -63,7 +63,7 @@ public class Project1Driver {
     
     try {
       FileWriter outputFileWriter = new FileWriter(outputDump, true);
-      outputFileWriter.write("Deposit Agents\t\t\t\t\t   Withdrawal Agents   \t\t\t\t        Balance\n--------------\t\t\t\t\t   -----------------   \t\t\t\t------------------------\n");
+      outputFileWriter.write("Deposit Agents\t\t\t   Withdrawal Agents   \t\t        Balance\n--------------\t\t\t   -----------------   \t\t------------------------\n");
       outputFileWriter.close();
     }
     catch(IOException e) {

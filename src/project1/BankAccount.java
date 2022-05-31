@@ -61,7 +61,7 @@ public class BankAccount {
 
       try {
         FileWriter outputFileWriter = new FileWriter(outputDump, true);
-        outputFileWriter.write("\t\t\t\t\t\t\t\t\t\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal + "\t\t\t(-) Balance is $" + balance + "\n");
+        outputFileWriter.write("\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal + "\t\t(-) Balance is $" + balance + "\n");
         outputFileWriter.close();
       }
       catch(IOException e) {
@@ -88,7 +88,7 @@ public class BankAccount {
         // instantiate a file writer and print threshold record to log file
         try {
           FileWriter logFileWriter = new FileWriter(logFile, true);
-          logFileWriter.write("\t\tWithdrawal Agent " + agentName + " issued withdrawal of $" + amountToWithdrawal + " at: " + timeFormatter.format(currentTime) + " EDT\n");
+          logFileWriter.write("\tWithdrawal Agent " + agentName + " issued withdrawal of $" + amountToWithdrawal + " at: " + timeFormatter.format(currentTime) + " EDT\n");
           logFileWriter.close();
         }
         catch(IOException e) {
@@ -101,7 +101,7 @@ public class BankAccount {
 
       try {
         FileWriter outputFileWriter = new FileWriter(outputDump, true);
-        outputFileWriter.write("\t\t\t\t\t\t\t\t\t\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal + "\t\t\t(******) WITHDRAWAL BLOCKED - INSUFFICIENT FUNDS!!!\n");
+        outputFileWriter.write("\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal + "\t\t(******) WITHDRAWAL BLOCKED - INSUFFICIENT FUNDS!!!\n");
         outputFileWriter.close();
       }
       catch(IOException e) {
@@ -135,7 +135,7 @@ public class BankAccount {
 
     try {
       FileWriter outputFileWriter = new FileWriter(outputDump, true);
-      outputFileWriter.write("Agent " + agentName + " deposits $" + amountToDeposit + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(+) Balance is $" + balance + "\n");
+      outputFileWriter.write("Agent " + agentName + " deposits $" + amountToDeposit + "\t\t\t\t\t\t(+) Balance is $" + balance + "\n");
       outputFileWriter.close();
     }
     catch(IOException e) {
@@ -161,7 +161,7 @@ public class BankAccount {
       // instantiate a file writer and print threshold record to file
       try {
         FileWriter logFileWriter = new FileWriter(logFile, true);
-        logFileWriter.write("Depositor Agent " + agentName + " issued withdrawal of $" + amountToDeposit + " at: " + timeFormatter.format(currentTime) + " EDT\n");
+        logFileWriter.write("Depositor Agent " + agentName + " issued deposit of $" + amountToDeposit + " at: " + timeFormatter.format(currentTime) + " EDT\n");
         logFileWriter.close();
       }
       catch(IOException e) {
