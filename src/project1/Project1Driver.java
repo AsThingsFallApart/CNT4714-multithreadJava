@@ -4,7 +4,10 @@
    Due Date: June 5, 2022
 */
 
+/* timeTakenToCompleteProject: 20 hours over 3 days (8 + 8 + 4) */
+
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,20 +16,23 @@ public class Project1Driver {
 
   public static void main(String[] args) {
     // instantiate a file to be used for threshold deposits/withdrawals
-    File outputFile = new File("transactions.txt");
+    File logFile = new File("transactions.txt");
+    /* optional: redirect output to file instead of stdout */
+    File outputDump = new File("outputDump.out");
+    outputDump.delete();
 
-    // wipe the file clean each time the project is executed
-    outputFile.delete();
+    // wipe the file clean each time the main function is executed
+    logFile.delete();
 
     try {
-      outputFile.createNewFile();
+      logFile.createNewFile();
     }
     catch(IOException exception) {
       exception.printStackTrace();
     }
     
     // instantiate a bank account object to be shared amongst threads
-    BankAccount account = new BankAccount(outputFile);
+    BankAccount account = new BankAccount(logFile);
 
     // create FIVE deposit agent threads
     Thread DT0 = new Thread(new DepositAgent("DT0", account));
@@ -47,8 +53,17 @@ public class Project1Driver {
     Thread WT8 = new Thread(new WithdrawalAgent("WT8", account));
     Thread WT9 = new Thread(new WithdrawalAgent("WT9", account));
     
-    System.out.print("Deposit Agents\t\t\t   Withdrawal Agents   \t\t        Balance\n");
-    System.out.print("--------------\t\t\t   -----------------   \t\t------------------------\n");
+    try {
+      FileWriter outputFileWriter = new FileWriter(outputDump, true);
+      outputFileWriter.write("Deposit Agents\t\t\t\t\t   Withdrawal Agents   \t\t\t\t        Balance\n--------------\t\t\t\t\t   -----------------   \t\t\t\t------------------------\n");
+      outputFileWriter.close();
+    }
+    catch(IOException e) {
+      e.printStackTrace();
+    }
+
+    // System.out.print("Deposit Agents\t\t\t   Withdrawal Agents   \t\t        Balance\n");
+    // System.out.print("--------------\t\t\t   -----------------   \t\t------------------------\n");
     
 
     // create ExecutorService to manage threads

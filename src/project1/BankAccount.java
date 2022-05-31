@@ -26,7 +26,10 @@ import java.time.format.DateTimeFormatter;
 
 public class BankAccount {
   private int balance = 0;
-  private File outputFile = new File("");
+  private File logFile = new File("");
+
+  /* optional: redirect all output to a file */
+  private File outputDump = new File("outputDump.out");
 
   /* create time objects to flag "threshold" deposits and withdrawals */
   // use the 'now()' method for 'LocalDateTime' objects to get a timestamp
@@ -44,7 +47,7 @@ public class BankAccount {
 
   // constructor
   public BankAccount(File oFile) {
-    outputFile = oFile;
+    logFile = oFile;
   }
 
   // mutator: subtract from balance
@@ -55,19 +58,38 @@ public class BankAccount {
 
     if(amountToWithdrawal <= balance) {
       balance -= amountToWithdrawal;
-  
-      System.out.print("\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal);
-      System.out.print("\t\t(-) Balance is $" + balance + "\n");
+
+      try {
+        FileWriter outputFileWriter = new FileWriter(outputDump, true);
+        outputFileWriter.write("\t\t\t\t\t\t\t\t\t\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal + "\t\t\t(-) Balance is $" + balance + "\n");
+        outputFileWriter.close();
+      }
+      catch(IOException e) {
+        e.printStackTrace();
+      }
+
+      // System.out.print("\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal);
+      // System.out.print("\t\t(-) Balance is $" + balance + "\n");
 
       if(amountToWithdrawal > 75) {
         currentTime = LocalDateTime.now();
-        System.out.print("\n* * * Flagged Transaction - Withdrawal Agent " + agentName + " Made A Withdrawal In Excess Of $75.00 USD - See Flagged Transaction Log.\n\n");
-  
-        // instantiate a file writer and print threshold record to file
+
         try {
-          FileWriter outputFileWriter = new FileWriter(outputFile, true);
-          outputFileWriter.write("\t\tWithdrawal Agent " + agentName + " issued withdrawal of $" + amountToWithdrawal + " at: " + timeFormatter.format(currentTime) + " EDT\n");
+          FileWriter outputFileWriter = new FileWriter(outputDump, true);
+          outputFileWriter.write("\n* * * Flagged Transaction - Withdrawal Agent " + agentName + " Made A Withdrawal In Excess Of $75.00 USD - See Flagged Transaction Log.\n\n");
           outputFileWriter.close();
+        }
+        catch(IOException e) {
+          e.printStackTrace();
+        }
+
+        // System.out.print("\n* * * Flagged Transaction - Withdrawal Agent " + agentName + " Made A Withdrawal In Excess Of $75.00 USD - See Flagged Transaction Log.\n\n");
+  
+        // instantiate a file writer and print threshold record to log file
+        try {
+          FileWriter logFileWriter = new FileWriter(logFile, true);
+          logFileWriter.write("\t\tWithdrawal Agent " + agentName + " issued withdrawal of $" + amountToWithdrawal + " at: " + timeFormatter.format(currentTime) + " EDT\n");
+          logFileWriter.close();
         }
         catch(IOException e) {
           e.printStackTrace();
@@ -76,8 +98,18 @@ public class BankAccount {
       }
     }
     else {
-      System.out.print("\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal);
-      System.out.print("\t\t(******) WITHDRAWAL BLOCKED - INSUFFICIENT FUNDS!!!\n");
+
+      try {
+        FileWriter outputFileWriter = new FileWriter(outputDump, true);
+        outputFileWriter.write("\t\t\t\t\t\t\t\t\t\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal + "\t\t\t(******) WITHDRAWAL BLOCKED - INSUFFICIENT FUNDS!!!\n");
+        outputFileWriter.close();
+      }
+      catch(IOException e) {
+        e.printStackTrace();
+      }
+
+      // System.out.print("\t\t\t\tAgent " + agentName + " withdraws $" + amountToWithdrawal);
+      // System.out.print("\t\t(******) WITHDRAWAL BLOCKED - INSUFFICIENT FUNDS!!!\n");
   
       try {
         // wait for balance to change, hopefully to a sufficient level 
@@ -101,17 +133,36 @@ public class BankAccount {
 
     balance += amountToDeposit;
 
-    System.out.print("Agent " + agentName + " deposits $" + amountToDeposit);
-    System.out.print("\t\t\t\t\t\t(+) Balance is $" + balance + "\n");
+    try {
+      FileWriter outputFileWriter = new FileWriter(outputDump, true);
+      outputFileWriter.write("Agent " + agentName + " deposits $" + amountToDeposit + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t(+) Balance is $" + balance + "\n");
+      outputFileWriter.close();
+    }
+    catch(IOException e) {
+      e.printStackTrace();
+    }
+
+    // System.out.print("Agent " + agentName + " deposits $" + amountToDeposit);
+    // System.out.print("\t\t\t\t\t\t(+) Balance is $" + balance + "\n");
 
     if(amountToDeposit > 350) {
-      System.out.print("\n* * * Flagged Transaction - Depositor Agent " + agentName + " Made A Deposit In Excess Of $350.00 USD - See Flagged Transaction Log.\n\n");
+
+      try {
+        FileWriter outputFileWriter = new FileWriter(outputDump, true);
+        outputFileWriter.write("\n* * * Flagged Transaction - Depositor Agent " + agentName + " Made A Deposit In Excess Of $350.00 USD - See Flagged Transaction Log.\n\n");
+        outputFileWriter.close();
+      }
+      catch(IOException e) {
+        e.printStackTrace();
+      }
+
+      // System.out.print("\n* * * Flagged Transaction - Depositor Agent " + agentName + " Made A Deposit In Excess Of $350.00 USD - See Flagged Transaction Log.\n\n");
 
       // instantiate a file writer and print threshold record to file
       try {
-        FileWriter outputFileWriter = new FileWriter(outputFile, true);
-        outputFileWriter.write("Depositor Agent " + agentName + " issued withdrawal of $" + amountToDeposit + " at: " + timeFormatter.format(currentTime) + " EDT\n");
-        outputFileWriter.close();
+        FileWriter logFileWriter = new FileWriter(logFile, true);
+        logFileWriter.write("Depositor Agent " + agentName + " issued withdrawal of $" + amountToDeposit + " at: " + timeFormatter.format(currentTime) + " EDT\n");
+        logFileWriter.close();
       }
       catch(IOException e) {
         e.printStackTrace();

@@ -35,8 +35,10 @@ public class DepositAgent implements Runnable {
 
       /* handle thread sleeping */
       // range: 6-9 (inclusive) milliseconds
-      // due to architecture of Spectrex360 host,
-      // depositor sleep duration is x3 withdrawal sleep duration
+      // due to combination of Spectrex360 architecture/Ubuntu 20.04 OS,
+      // depositor sleep duration is x3 withdrawal sleep duration.
+      // executing this project on a different operating system will
+      // result in depositor agents increasing their deposit frequency!!
       sleepDuration = random.nextInt(4) + 6;
       try {
         Thread.sleep(sleepDuration);
