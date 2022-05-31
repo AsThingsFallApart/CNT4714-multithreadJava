@@ -17,13 +17,10 @@ public class Project1Driver {
   public static void main(String[] args) {
     // instantiate a file to be used for threshold deposits/withdrawals
     File logFile = new File("transactions.txt");
-    /* optional: redirect output to file instead of stdout */
-    File outputDump = new File("outputDump.out");
-    outputDump.delete();
-
+    
     // wipe the file clean each time the main function is executed
     logFile.delete();
-
+    
     try {
       logFile.createNewFile();
     }
@@ -31,6 +28,17 @@ public class Project1Driver {
       exception.printStackTrace();
     }
     
+    /* optional: redirect output to file instead of stdout */
+    File outputDump = new File("outputDump.out");
+    outputDump.delete();
+
+    try {
+      outputDump.createNewFile();
+    }
+    catch(IOException exception) {
+      exception.printStackTrace();
+    }
+
     // instantiate a bank account object to be shared amongst threads
     BankAccount account = new BankAccount(logFile);
 
